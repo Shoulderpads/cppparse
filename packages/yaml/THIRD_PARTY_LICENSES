@@ -1,0 +1,16 @@
+This package includes the following third-party software:
+
+================================================================================
+rapidyaml (ryml)
+https://github.com/biojppm/rapidyaml
+Copyright (c) 2018, Joao Paulo Magalhaes <dev@jpmag.me>
+License: MIT
+================================================================================
+
+The rapidyaml amalgamated header (deps/rapidyaml/ryml_all.hpp) also bundles:
+
+- c4core: Copyright (c) 2018, Joao Paulo Magalhaes — MIT License
+- fast_float: Copyright (c) 2021 The fast_float authors — MIT License
+- debugbreak: Copyright (c) 2011-2021, Scott Tsai — BSD-2-Clause License
+
+All bundled dependencies use permissive open-source licenses compatible with MIT.

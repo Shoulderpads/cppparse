@@ -1,0 +1,19 @@
+{
+  "name": "cppparse",
+  "private": true,
+  "description": "Native C++ parsing libraries that outperform their JS equivalents",
+  "workspaces": [
+    "packages/*"
+  ],
+  "scripts": {
+    "build": "npm run build --workspaces",
+    "test": "npm run test --workspaces",
+    "bench": "npm run bench --workspaces --if-present"
+  },
+  "devDependencies": {
+    "js-yaml": "^4.1.1",
+    "node-gyp": "^12.2.0",
+    "typescript": "^5.9.3",
+    "vitest": "^1.6.1"
+  }
+}
