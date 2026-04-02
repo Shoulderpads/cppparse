@@ -1,6 +1,7 @@
 node_modules/
 build/
 *.node
+!packages/yaml/prebuilds/**/*.node
 *.o
 *.obj
 *.log
