@@ -1,0 +1,71 @@
+{
+  "name": "@cppparse/xml",
+  "version": "0.1.0",
+  "description": "Fast XML parse & stringify powered by pugixml",
+  "type": "module",
+  "main": "lib/index.cjs",
+  "exports": {
+    ".": {
+      "require": "./lib/index.cjs",
+      "import": "./lib/index.mjs",
+      "types": "./types/index.d.ts"
+    }
+  },
+  "types": "types/index.d.ts",
+  "scripts": {
+    "install": "node-gyp-build",
+    "build": "node-gyp rebuild",
+    "prebuildify": "prebuildify --napi --strip",
+    "test": "vitest run",
+    "bench": "node bench/benchmark.mjs",
+    "prepublishOnly": "npm run test"
+  },
+  "files": [
+    "lib/",
+    "types/",
+    "binding.gyp",
+    "src/",
+    "deps/pugixml/",
+    "prebuilds/",
+    "README.md",
+    "LICENSE",
+    "THIRD_PARTY_LICENSES"
+  ],
+  "keywords": [
+    "xml",
+    "parser",
+    "native",
+    "pugixml",
+    "performance"
+  ],
+  "author": "Shoulderpads",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Shoulderpads/cppparse.git",
+    "directory": "packages/xml"
+  },
+  "homepage": "https://github.com/Shoulderpads/cppparse/tree/main/packages/xml#readme",
+  "bugs": {
+    "url": "https://github.com/Shoulderpads/cppparse/issues"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "os": [
+    "darwin",
+    "linux",
+    "win32"
+  ],
+  "cpu": [
+    "x64",
+    "arm64"
+  ],
+  "dependencies": {
+    "node-addon-api": "^8.7.0",
+    "node-gyp-build": "^4.8.4"
+  },
+  "devDependencies": {
+    "prebuildify": "^6.0.1"
+  }
+}
