@@ -21,14 +21,13 @@ static inline Value MakeAttrKey(Env env, const char* name) {
   return String::New(env, s);
 }
 
-// Convert an XML element to a Napi value.
-// Single-pass: detects structure and builds the JS value in one traversal.
+// Convert an XML element into a JS value.
 static Value ElementToNapi(Env env, const pugi::xml_node& el) {
-  // Quick check: no attributes and no child elements → pure text leaf
+  // No attributes and no child elements
   pugi::xml_attribute first_attr = el.first_attribute();
   pugi::xml_node first_child = el.first_child();
 
-  // Fast path: element has zero or one text child and no attributes
+  // Element has zero or one text child and no attributes
   if (!first_attr) {
     if (!first_child) {
       // Empty element: <empty/>
@@ -43,8 +42,7 @@ static Value ElementToNapi(Env env, const pugi::xml_node& el) {
     }
   }
 
-  // General path: element has attributes and/or mixed children.
-  // Single pass over children to collect text and detect element children.
+// Attributes and/or child nodes.
   Object obj = Object::New(env);
 
   // Attributes
@@ -54,12 +52,8 @@ static Value ElementToNapi(Env env, const pugi::xml_node& el) {
             String::New(env, attr.value()));
   }
 
-  // Children — single pass.
-  // For repeated element detection, we track the previous tag name.
-  // Most XML has either unique children or long runs of the same tag,
-  // so we optimise for the common cases:
-  //  - All unique children: set directly on obj, no vectors
-  //  - Repeated children: upgrade to array on second occurrence
+  // Children: single pass.
+  // Upgrade repeated child tags to arrays.
   const char* prev_tag = nullptr;
   Value prev_val;
   bool has_text = false;
@@ -90,10 +84,9 @@ static Value ElementToNapi(Env env, const pugi::xml_node& el) {
     Value val = ElementToNapi(env, child);
 
     // Check if this tag matches a previous sibling with the same name.
-    // We check: does this key already exist on the object?
     // For the common case of consecutive repeated tags, we track prev_tag.
     if (prev_tag && std::strcmp(prev_tag, tag) == 0) {
-      // Same as previous — it's already been set on obj.
+      // Same as previous. It's already been set on obj.
       // Check if it's already an array.
       Value existing = obj.Get(tag);
       if (existing.IsArray()) {
@@ -139,7 +132,7 @@ static Value ElementToNapi(Env env, const pugi::xml_node& el) {
   return obj;
 }
 
-// Convert an XML document to a Napi Object.
+// Convert an XML document to a JS Object.
 static Value DocumentToNapi(Env env, const pugi::xml_document& doc) {
   Object root = Object::New(env);
 
@@ -305,10 +298,10 @@ static Value Stringify(const CallbackInfo& info) {
     if (env.IsExceptionPending()) return env.Undefined();
 
     StringWriter writer;
-    // Use format_indent for pretty output; skip auto-declaration since
+    // Use format_indent for pretty output. Skip auto-declaration since
     // we handle "?xml" explicitly in the document tree.
     unsigned int flags = pugi::format_indent;
-    // Only suppress the auto declaration — if a declaration node exists
+    // Only suppress the auto declaration. If a declaration node exists
     // in the tree it will still be written.
     doc.save(writer, "  ", flags | pugi::format_no_declaration);
     // If the doc has a declaration, re-save with declaration included.
